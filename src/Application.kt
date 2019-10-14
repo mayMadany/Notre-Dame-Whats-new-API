@@ -1,16 +1,42 @@
 package ca.etsmtl.applets.notre_dame
 
+import ca.etsmtl.applets.notre_dame.config.common
+import ca.etsmtl.applets.notre_dame.config.whatsNewRepo
+import ca.etsmtl.applets.notre_dame.config.whatsNewSController
+import ca.etsmtl.applets.notre_dame.config.whatsNewService
 import io.ktor.application.*
-import io.ktor.response.*
-import io.ktor.request.*
 import io.ktor.features.*
-import io.ktor.routing.*
 import io.ktor.http.*
 import io.ktor.auth.*
 import com.fasterxml.jackson.databind.*
+import com.typesafe.config.ConfigFactory
+import io.ktor.config.HoconApplicationConfig
 import io.ktor.jackson.*
+import io.ktor.response.respond
+import io.ktor.response.respondText
+import io.ktor.routing.get
+import io.ktor.routing.routing
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.netty.Netty
+import org.kodein.di.Kodein
+import org.kodein.di.generic.bind
+import org.kodein.di.generic.singleton
 
-fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
+@UseExperimental(io.ktor.util.KtorExperimentalAPI::class)
+fun main(args: Array<String>){
+    val config = HoconApplicationConfig(ConfigFactory.load())
+    val port =config.property("ktor.deployment.port").getString().toInt()
+    embeddedServer(Netty, port = port){
+        kodeinApplication{
+          module(true)
+
+          import (common)
+            import (whatsNewRepo)
+            import (whatsNewService)
+            import (whatsNewSController)
+        }
+    }.start(wait = true)
+}
 
 @Suppress("unused") // Referenced in application.conf
 @kotlin.jvm.JvmOverloads
@@ -35,7 +61,7 @@ fun Application.module(testing: Boolean = false) {
         }
     }
 
-    routing {
+   routing {
         get("/") {
             call.respondText("HELLO WORLD!", contentType = ContentType.Text.Plain)
         }
@@ -45,4 +71,10 @@ fun Application.module(testing: Boolean = false) {
         }
     }
 }
-
+fun Application.kodeinApplication(kodeinMapper : Kodein.MainBuilder.(Application) -> Unit = {}) {
+    val app = this
+    Kodein {
+        bind<Application>() with singleton { app }
+        kodeinMapper(this, app)
+    }
+}
