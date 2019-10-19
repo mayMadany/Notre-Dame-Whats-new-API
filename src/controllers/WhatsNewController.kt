@@ -17,13 +17,16 @@ class WhatsNewController (override val kodein: Kodein) : KodeinAware{
     private val service: WhatsNewService by instance("whatsNewService")
     init {
         app.routing {
+            get("/whatsNew"){
+                call.respond(service.getallWhatsNew())
+            }
             get("/whatsNew/{version}")  {
                 val version : Float = call.parameters["version"]?.toFloat() ?: 0.0f
                 call.respond(service.getByVersion(version))
             }
             post ("/whatsNew"){
                 val newWhatsNew = call.receive<WhatsNew>()
-                call.respond(service.addNewWhatNew(newWhatsNew))
+                call.respond(service.addNewWhatsNew(newWhatsNew))
             }
         }
     }

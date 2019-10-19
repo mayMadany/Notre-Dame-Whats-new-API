@@ -1,15 +1,17 @@
 package ca.etsmtl.applets.notre_dame.repository
 
 import ca.etsmtl.applets.notre_dame.model.WhatsNew
+import ca.etsmtl.applets.notre_dame.utils.Property
 import com.mongodb.MongoClient
-import com.typesafe.config.ConfigFactory
-import io.ktor.config.HoconApplicationConfig
+import io.ktor.locations.KtorExperimentalLocationsAPI
+import io.ktor.util.KtorExperimentalAPI
 import org.litote.kmongo.*
 
+@KtorExperimentalLocationsAPI
+@KtorExperimentalAPI
 class WhatsNewRepo (val client: MongoClient){
-      val config = HoconApplicationConfig(ConfigFactory.load())
-      val databaseName  = config.property("database.name").getString()
-      val whatsNewCollName = config.property("database.whatsNewCollection").getString()
+      val databaseName  = Property["db.name"]
+      val whatsNewCollName =Property["db.whatsNewCollection"]
       val whatsNewCollection = client.getDatabase(databaseName).getCollection<WhatsNew>(whatsNewCollName)
 
     fun getByVersion( version : Float) : MutableList<WhatsNew>
@@ -20,5 +22,10 @@ class WhatsNewRepo (val client: MongoClient){
     fun addWhatNew ( whatnewOb : WhatsNew) :Unit
     {
         return whatsNewCollection.insertOne(whatnewOb)
+    }
+
+    fun getAllWhatsNew() : MutableList<WhatsNew>
+    {
+        return whatsNewCollection.find().toMutableList();
     }
 }

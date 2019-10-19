@@ -1,9 +1,6 @@
 package ca.etsmtl.applets.notre_dame
 
-import ca.etsmtl.applets.notre_dame.config.common
-import ca.etsmtl.applets.notre_dame.config.whatsNewRepo
-import ca.etsmtl.applets.notre_dame.config.whatsNewSController
-import ca.etsmtl.applets.notre_dame.config.whatsNewService
+import ca.etsmtl.applets.notre_dame.config.*
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*
@@ -28,19 +25,20 @@ fun main(args: Array<String>){
     val port =config.property("ktor.deployment.port").getString().toInt()
     embeddedServer(Netty, port = port){
         kodeinApplication{
-          module(true)
-
+          module()
           import (common)
-            import (whatsNewRepo)
-            import (whatsNewService)
-            import (whatsNewSController)
+          import (whatsNewRepo)
+          import (whatsNewService)
+          import (whatsNewSController)
+          import (usersRepo)
+          import (usersService)
+          import (usersController)
         }
     }.start(wait = true)
 }
 
 @Suppress("unused") // Referenced in application.conf
-@kotlin.jvm.JvmOverloads
-fun Application.module(testing: Boolean = false) {
+fun Application.module() {
     install(CORS) {
         method(HttpMethod.Options)
         method(HttpMethod.Put)

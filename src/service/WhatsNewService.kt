@@ -10,7 +10,12 @@ class WhatsNewService ( val repo : WhatsNewRepo) {
         return repo.getByVersion(version)
     }
 
-    fun addNewWhatNew ( whatsNewOb : WhatsNew) : Unit{
+    fun addNewWhatsNew ( whatsNewOb : WhatsNew) : Unit{
         return repo.addWhatNew(whatsNewOb)
+    }
+
+    fun getallWhatsNew () :MutableList<WhatsNew>
+    {
+        return repo.getAllWhatsNew()
     }
 }
