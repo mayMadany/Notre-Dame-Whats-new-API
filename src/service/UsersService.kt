@@ -13,4 +13,9 @@ class UsersService ( val repo : UsersRepo) {
     {
         return repo.getAllUsers()
     }
+
+    fun findByUsername( userName : String) : User?
+    {
+        return repo.findByUserName(userName)
+    }
 }

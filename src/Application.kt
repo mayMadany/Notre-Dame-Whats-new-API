@@ -18,10 +18,13 @@ import io.ktor.server.netty.Netty
 import org.kodein.di.Kodein
 import org.kodein.di.generic.bind
 import org.kodein.di.generic.singleton
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 @UseExperimental(io.ktor.util.KtorExperimentalAPI::class)
 fun main(args: Array<String>){
     val config = HoconApplicationConfig(ConfigFactory.load())
+    val serverLogger: Logger = LoggerFactory.getLogger("Server")
     val port =config.property("ktor.deployment.port").getString().toInt()
     embeddedServer(Netty, port = port){
         kodeinApplication{
@@ -45,9 +48,7 @@ fun Application.module() {
         method(HttpMethod.Delete)
         method(HttpMethod.Patch)
         header(HttpHeaders.Authorization)
-        header("MyCustomHeader")
         allowCredentials = true
-        anyHost() // @TODO: Don't do this in production if possible. Try to limit it.
     }
 
     install(Authentication) {
@@ -58,17 +59,8 @@ fun Application.module() {
             enable(SerializationFeature.INDENT_OUTPUT)
         }
     }
-
-   routing {
-        get("/") {
-            call.respondText("HELLO WORLD!", contentType = ContentType.Text.Plain)
-        }
-
-        get("/json/jackson") {
-            call.respond(mapOf("hello" to "world"))
-        }
-    }
 }
+
 fun Application.kodeinApplication(kodeinMapper : Kodein.MainBuilder.(Application) -> Unit = {}) {
     val app = this
     Kodein {

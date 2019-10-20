@@ -1,7 +1,11 @@
 package ca.etsmtl.applets.notre_dame.controllers
 
+import ca.etsmtl.applets.notre_dame.ApiExceptions.UserNotFound
+import ca.etsmtl.applets.notre_dame.model.LoginCredentials
 import ca.etsmtl.applets.notre_dame.model.User
 import ca.etsmtl.applets.notre_dame.service.UsersService
+import ca.etsmtl.applets.notre_dame.utils.BcryptHasher
+import ca.etsmtl.applets.notre_dame.utils.JwtConfig
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import io.ktor.application.Application
@@ -21,9 +25,20 @@ class UsersController (override val kodein: Kodein) : KodeinAware {
             get("/users"){
                 call.respond(service.getAllUsers())
             }
+
             post ("/users"){
                 val newUser = call.receive<User>()
+                val hashedPass = BcryptHasher.hashPassword(newUser.password)
+                newUser.copy( password = hashedPass)
                 call.respond(service.addNewUser(newUser))
+            }
+
+            post("/users/login"){
+                val credentials = call .receive<LoginCredentials>()
+                val user = service.findByUsername(credentials.userName) ?: throw UserNotFound
+                BcryptHasher.checkPassword(credentials.password,user)
+                val token = JwtConfig.makeToken(user)
+                call.respond( user.copy(token = token))
             }
         }
     }

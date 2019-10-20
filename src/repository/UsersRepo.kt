@@ -3,6 +3,8 @@ package ca.etsmtl.applets.notre_dame.repository
 import ca.etsmtl.applets.notre_dame.model.User
 import ca.etsmtl.applets.notre_dame.utils.Property
 import com.mongodb.MongoClient
+import org.litote.kmongo.eq
+import org.litote.kmongo.findOne
 import org.litote.kmongo.getCollection
 
 class UsersRepo (val client: MongoClient) {
@@ -18,5 +20,10 @@ class UsersRepo (val client: MongoClient) {
     fun getAllUsers() : MutableList<User>
     {
         return usersCollection.find().toMutableList();
+    }
+
+    fun findByUserName ( userName : String) : User?
+    {
+        return usersCollection.findOne(User::userName eq userName)
     }
 }

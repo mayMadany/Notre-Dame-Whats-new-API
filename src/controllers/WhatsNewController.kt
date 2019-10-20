@@ -3,6 +3,7 @@ import ca.etsmtl.applets.notre_dame.model.WhatsNew
 import ca.etsmtl.applets.notre_dame.service.WhatsNewService
 import io.ktor.application.Application
 import io.ktor.application.call
+import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.routing
@@ -11,13 +12,16 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance
 import io.ktor.routing.get
 import io.ktor.routing.post
+import java.util.*
 
+@KtorExperimentalLocationsAPI
 class WhatsNewController (override val kodein: Kodein) : KodeinAware{
     private val app : Application by instance()
     private val service: WhatsNewService by instance("whatsNewService")
     init {
         app.routing {
             get("/whatsNew"){
+                val u =  UUID.randomUUID()
                 call.respond(service.getallWhatsNew())
             }
             get("/whatsNew/{version}")  {

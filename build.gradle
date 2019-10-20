@@ -36,19 +36,20 @@ dependencies {
     compile "ch.qos.logback:logback-classic:$logback_version"
     compile "io.ktor:ktor-metrics:$ktor_version"
     compile "io.ktor:ktor-server-core:$ktor_version"
-    compile "io.ktor:ktor-auth:$ktor_version"
+    compile "io.ktor:ktor-auth-jwt:$ktor_version"
     compile "io.ktor:ktor-jackson:$ktor_version"
     compile "org.kodein.di:kodein-di-generic-jvm:5.2.0"
     compile "org.litote.kmongo:kmongo-native:3.8.1"
+    compile "org.mindrot:jbcrypt:0.4"
     implementation "io.ktor:ktor-locations:$ktor_version"
     testCompile "io.ktor:ktor-server-tests:$ktor_version"
 }
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-    kotlinOptions.freeCompilerArgs += ["-Xuse-experimental=io.ktor.Experimental"]
+    kotlinOptions.freeCompilerArgs += ["-Xuse-experimental=kotlin.Experimental"]
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinTest).all {
-    kotlinOptions.freeCompilerArgs += ["-Xuse-experimental=io.ktor.Experimental"]
+    kotlinOptions.freeCompilerArgs += ["-Xuse-experimental=kotlin.Experimental"]
 }
 
 compileKotlin {
