@@ -9,17 +9,32 @@ import io.ktor.util.KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
 class WhatsNewService (val repo : WhatsNewRepo) {
 
-    fun getByVersion ( version : Float) : MutableList<WhatsNew>
+    fun getByVersionEn ( version : Float) : MutableList<WhatsNew>
     {
-        return repo.getByVersion(version)
+        return repo.getByVersionEn(version)
     }
 
-    fun addNewWhatsNew ( whatsNewOb : WhatsNew) : Unit{
-        return repo.addWhatNew(whatsNewOb)
+    fun addNewWhatsNewEn ( whatsNewOb : WhatsNew) : Unit{
+        return repo.addWhatNewEn(whatsNewOb)
     }
 
-    fun getallWhatsNew () :MutableList<WhatsNew>
+    fun getAllWhatsNewEn () :MutableList<WhatsNew>
     {
-        return repo.getAllWhatsNew()
+        return repo.getAllWhatsNewEn()
     }
+
+    fun getByVersionFr ( version : Float) : MutableList<WhatsNew>
+    {
+        return repo.getByVersionFr(version)
+    }
+
+    fun addNewWhatsNewFr ( whatsNewOb : WhatsNew) : Unit{
+        return repo.addWhatNewFr(whatsNewOb)
+    }
+
+    fun getAllWhatsNewFr () :MutableList<WhatsNew>
+    {
+        return repo.getAllWhatsNewFr()
+    }
+
 }

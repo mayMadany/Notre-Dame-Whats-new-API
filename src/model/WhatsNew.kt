@@ -9,8 +9,6 @@ import org.litote.kmongo.newId
 @Location("/whatsNew/{version}")
 data class WhatsNew(
     val _id : Id<WhatsNew> = newId(),
-    var titleEn : String,
-    var descriptionEn : String,
-    var titleFr : String,
-    var descriptionFr : String,
+    var title : String,
+    var description : String,
     val version : Float )

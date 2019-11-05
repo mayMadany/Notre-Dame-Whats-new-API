@@ -27,10 +27,7 @@ class UsersController (override val kodein: Kodein) : KodeinAware {
             }
 
             post ("/users"){
-                val newUser = call.receive<User>()
-                val hashedPass = BcryptHasher.hashPassword(newUser.password)
-                newUser.copy( password = hashedPass)
-                call.respond(service.addNewUser(newUser))
+                call.respond(service.addNewUser(call.receive<User>()))
             }
 
             post("/users/login"){

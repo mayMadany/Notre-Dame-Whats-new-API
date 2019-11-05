@@ -1,6 +1,7 @@
 package ca.etsmtl.applets.notre_dame.model
 
 import ca.etsmtl.applets.notre_dame.utils.Roles
+import io.ktor.auth.Principal
 import org.litote.kmongo.Id
 import org.litote.kmongo.newId
 
@@ -9,4 +10,4 @@ data class User (
     var userName : String,
     var role : Roles,
     var password : String,
-    var token : String)
+    var token : String? =null): Principal

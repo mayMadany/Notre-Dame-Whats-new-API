@@ -47,3 +47,7 @@ val usersService = Kodein.Module(name = "usersService") {
 val usersController = Kodein.Module(name = "usersController") {
         bind(tag = "usersController") from eagerSingleton { UsersController(kodein) }
 }
+
+val serverModule = Kodein.Module (name = "serverModule"){
+    bind(tag="serverModule") from eagerSingleton { ServerModule (kodein) }
+}

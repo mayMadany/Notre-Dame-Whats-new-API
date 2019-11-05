@@ -11,21 +11,37 @@ import org.litote.kmongo.*
 @KtorExperimentalAPI
 class WhatsNewRepo (val client: MongoClient){
       val databaseName  = Property["db.name"]
-      val whatsNewCollName =Property["db.whatsNewCollection"]
-      val whatsNewCollection = client.getDatabase(databaseName).getCollection<WhatsNew>(whatsNewCollName)
+      val whatsNewCollNameEn =Property["db.whatsNewCollectionEn"]
+      val whatsNewCollNameFr =Property["db.whatsNewCollectionFr"]
+      val whatsNewCollectionEn = client.getDatabase(databaseName).getCollection<WhatsNew>(whatsNewCollNameEn)
+      val whatsNewCollectionFr = client.getDatabase(databaseName).getCollection<WhatsNew>(whatsNewCollNameFr)
 
-    fun getByVersion( version : Float) : MutableList<WhatsNew>
+    fun getByVersionEn( version : Float) : MutableList<WhatsNew>
     {
-        return whatsNewCollection.find(WhatsNew::version eq version).toMutableList()
+        return whatsNewCollectionEn.find(WhatsNew::version eq version).toMutableList()
     }
 
-    fun addWhatNew ( whatnewOb : WhatsNew) :Unit
+    fun addWhatNewEn ( whatnewOb : WhatsNew) :Unit
     {
-        return whatsNewCollection.insertOne(whatnewOb)
+        return whatsNewCollectionEn.insertOne(whatnewOb)
     }
 
-    fun getAllWhatsNew() : MutableList<WhatsNew>
+    fun getAllWhatsNewEn() : MutableList<WhatsNew>
     {
-        return whatsNewCollection.find().toMutableList();
+        return whatsNewCollectionFr.find().toMutableList();
+    }
+    fun getByVersionFr( version : Float) : MutableList<WhatsNew>
+    {
+        return whatsNewCollectionFr.find(WhatsNew::version eq version).toMutableList()
+    }
+
+    fun addWhatNewFr( whatnewOb : WhatsNew) :Unit
+    {
+        return whatsNewCollectionFr.insertOne(whatnewOb)
+    }
+
+    fun getAllWhatsNewFr() : MutableList<WhatsNew>
+    {
+        return whatsNewCollectionFr.find().toMutableList();
     }
 }
