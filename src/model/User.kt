@@ -10,4 +10,4 @@ data class User (
     var userName : String,
     var role : Roles,
     var password : String,
-    var token : String? =null): Principal
+    var token : String): Principal
